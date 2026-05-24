@@ -363,7 +363,7 @@ ctx.fillText(session || 'সেশন', textStartX, pill3Y);
         <div className="card">
 
           <div>
-            <p className="page-title">সরকারি বাঙলা কলেজ প্রথম মিলনমেলা</p>
+            <p className="page-title">সরকারি বাঙলা কলেজ প্রাক্তন শিক্ষার্থীদের প্রথম মিলনমেলা-২০২৬</p>
             <p className="page-sub">ফটোকার্ড জেনারেটর</p>
           </div>
 
