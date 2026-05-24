@@ -371,10 +371,10 @@ ctx.fillText(session || 'সেশন', textStartX, pill3Y);
 
             {/* Name */}
             <div>
-              <label className="field-label">নাম:</label>
+              <label className="field-label">নাম: (বাংলায়)</label>
               <input
                 type="text"
-                placeholder="উদা: মোঃ আতিকুর রহমান"
+                placeholder="E.x: মোঃ আতিকুর রহমান"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               />
