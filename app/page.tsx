@@ -363,7 +363,7 @@ ctx.fillText(session || 'সেশন', textStartX, pill3Y);
         <div className="card">
 
           <div>
-            <p className="page-title">গভঃ বাংলা কলেজ মিলনমেলা</p>
+            <p className="page-title">সরকারি বাঙলা কলেজ প্রথম মিলনমেলা</p>
             <p className="page-sub">ফটোকার্ড জেনারেটর</p>
           </div>
 
@@ -528,6 +528,25 @@ ctx.fillText(session || 'সেশন', textStartX, pill3Y);
               <span>ডাউনলোড করুন ও শেয়ার করুন</span>
             </button>
           )}
+          
+
+        {/* Credit */}
+          <div style={{ textAlign: 'center', marginTop: '1.5rem', paddingTop: '1rem', borderTop: '1px solid #ede8ff' }}>
+            <p style={{ color: '#9e90c8', fontSize: '0.78rem', margin: '0 0 0.2rem' }}>
+              সৌজন্যে: সরকারি বাঙলা কলেজ পরিবার
+            </p>
+            <p style={{ color: '#b0a8d0', fontSize: '0.72rem', margin: 0 }}>
+              Developed by{' '}
+              
+                <a href="https://jisan.openwindowbd.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: '#7c5cbf', fontWeight: 700, textDecoration: 'none' }}
+              >
+                Jisan Sheikh
+              </a>
+            </p>
+          </div>
 
         </div>
       </main>
