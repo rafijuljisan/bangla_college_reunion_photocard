@@ -82,10 +82,10 @@ export default function Home() {
         const pill2Y = 685;
         const pill3Y = 760;
 
-        ctx.font = '900 38px "Noto Serif Bengali", serif';
+        ctx.font = '900 34px "Noto Serif Bengali", serif';
         ctx.fillText(name || 'আপনার নাম', textStartX, pill1Y);
 
-        ctx.font = 'bold 36px "Noto Serif Bengali", serif';
+        ctx.font = 'bold 34px "Noto Serif Bengali", serif';
         ctx.fillText(department || 'বিভাগ', textStartX, pill2Y);
         ctx.fillText(session || 'সেশন', textStartX, pill3Y);
       };
@@ -330,6 +330,9 @@ export default function Home() {
           font-size: 1rem; color: #2d3748; background: #fff; outline: none; transition: all 0.2s;
           appearance: none;
         }
+        .input-wrapper input::placeholder {
+          opacity: 0.5; /* যত কমাবে তত হালকা হবে */
+        }
         .input-wrapper input:focus, .input-wrapper select:focus { border-color: #5b6cf9; box-shadow: 0 0 0 3px rgba(91,108,249,0.1); }
         .input-wrapper select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a0aec0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1rem center; background-size: 1em; }
 
@@ -377,7 +380,7 @@ export default function Home() {
           .form-row { flex-direction: column; gap: 0; }
           
           /* Mobile Bottom Navigation */
-          .mobile-nav { display: flex; position: fixed; bottom: 0; left: 0; width: 100%; background: #fff; box-shadow: 0 -5px 20px rgba(0,0,0,0.05); z-index: 50; padding: 0.8rem 1.5rem; justify-content: space-between; align-items: center; border-radius: 1.5rem 1.5rem 0 0; }
+          .mobile-nav { display: none; position: fixed; bottom: 0; left: 0; width: 100%; background: #fff; box-shadow: 0 -5px 20px rgba(0,0,0,0.05); z-index: 50; padding: 0.8rem 1.5rem; justify-content: space-between; align-items: center; border-radius: 1.5rem 1.5rem 0 0; }
           .nav-item { display: flex; flex-direction: column; align-items: center; gap: 0.3rem; color: #a0aec0; font-size: 0.75rem; cursor: pointer; }
           .nav-item.active { color: #5b6cf9; }
           .nav-icon-wrap { padding: 0.5rem; border-radius: 50%; }
@@ -407,8 +410,8 @@ export default function Home() {
         <div className="floating-badge">
           <div className="badge-icon">👥</div>
           <div className="badge-text">
-            <h4>একসাথে স্মৃতির পথে</h4>
-            <p>পুরানো বন্ধুত্ব, নতুন উদ্দীপনা ❤️</p>
+            <h4>স্মৃতির টানে, প্রিয় প্রাঙ্গনে</h4>
+            <p>এই মূল সুরকে ধারণ করে দিনব্যাপী এই উৎসবের আয়োজন করা হয়েছে। ❤️</p>
           </div>
         </div>
 
