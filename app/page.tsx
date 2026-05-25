@@ -60,10 +60,21 @@ export default function Home() {
       ctx.closePath();
       ctx.clip();
 
-      const imgSize = CIRCLE_RADIUS * 2.2 * photoScale;
-      const imgX = CIRCLE_CENTER_X - imgSize / 2 + photoOffset.x;
-      const imgY = CIRCLE_CENTER_Y - imgSize / 2 + photoOffset.y;
-      ctx.drawImage(userImg, imgX, imgY, imgSize, imgSize);
+      const baseSize = CIRCLE_RADIUS * 2.2;
+      const aspectRatio = userImg.naturalWidth / userImg.naturalHeight;
+
+      let drawWidth, drawHeight;
+      if (aspectRatio >= 1) {
+        drawHeight = baseSize * photoScale;
+        drawWidth = drawHeight * aspectRatio;
+      } else {
+        drawWidth = baseSize * photoScale;
+        drawHeight = drawWidth / aspectRatio;
+      }
+
+      const imgX = CIRCLE_CENTER_X - drawWidth / 2 + photoOffset.x;
+      const imgY = CIRCLE_CENTER_Y - drawHeight / 2 + photoOffset.y;
+      ctx.drawImage(userImg, imgX, imgY, drawWidth, drawHeight);
       ctx.restore();
 
       // --- 2. DRAW TEMPLATE ---
