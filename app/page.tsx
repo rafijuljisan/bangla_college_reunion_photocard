@@ -17,6 +17,8 @@ export default function Home() {
   const lastPinchDist = useRef<number | null>(null);
   const userImgRef = useRef<HTMLImageElement | null>(null);
 
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
+
   // Circle config (canvas coords)
   const CIRCLE_CENTER_X = 330;
   const CIRCLE_CENTER_Y = 510;
@@ -217,10 +219,35 @@ export default function Home() {
   const handleDownload = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const link = document.createElement('a');
-    link.download = `${name || 'gbc-guest'}-photocard.png`;
-    link.href = canvas.toDataURL('image/png');
-    link.click();
+    const fileName = `${name || 'gbc-guest'}-photocard.png`;
+
+    canvas.toBlob(async (blob) => {
+      if (!blob) return;
+
+      // iOS → use native share sheet
+      if (isIOS && navigator.share && navigator.canShare) {
+        const file = new File([blob], fileName, { type: 'image/png' });
+        if (navigator.canShare({ files: [file] })) {
+          try {
+            await navigator.share({ files: [file], title: 'সরকারি বাংলা কলেজ' });
+            return;
+          } catch (error) {
+            if ((error as Error).name === 'AbortError') return; // user canceled
+          }
+        }
+      }
+
+      // Android + Desktop → direct download
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+
+    }, 'image/png');
   };
 
   const departments = [
@@ -257,18 +284,18 @@ export default function Home() {
         .app-layout { position: relative; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem 5%; }
         .bg-layer { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: url('/bg.jpg') center/cover no-repeat; z-index: -2; }
         .bg-overlay { 
-  position: fixed; 
-  top: 0; 
-  left: 0; 
-  width: 100%; 
-  height: 100vh; 
-  /* Vibrant, lighter purple-to-cyan gradient with lower opacity */
-  background: linear-gradient(135deg, rgba(91, 108, 249, 0.45) 0%, rgba(56, 189, 248, 0.3) 100%); 
-  /* Increased blur for a smoother, glossier frosted glass look */
-  backdrop-filter: blur(10px); 
-  -webkit-backdrop-filter: blur(10px);
-  z-index: -1; 
-}
+          position: fixed; 
+          top: 0; 
+          left: 0; 
+          width: 100%; 
+          height: 100vh; 
+          /* Vibrant, lighter purple-to-cyan gradient with lower opacity */
+          background: linear-gradient(135deg, rgba(91, 108, 249, 0.45) 0%, rgba(56, 189, 248, 0.3) 100%); 
+          /* Increased blur for a smoother, glossier frosted glass look */
+          backdrop-filter: blur(10px); 
+          -webkit-backdrop-filter: blur(10px);
+          z-index: -1; 
+        }
         .bg-shapes { position: fixed; bottom: -100px; left: -100px; width: 500px; height: 500px; background: rgba(255,255,255,0.4); filter: blur(80px); border-radius: 50%; z-index: -1; }
 
         /* Desktop specific side elements */
@@ -509,8 +536,25 @@ export default function Home() {
 
           {/* Generate Button */}
           <button className="btn-primary" onClick={handleDownload}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2l3 6 6 3-6 3-3 6-3-6-6-3 6-3 3-6z"></path></svg>
-            ফটোকার্ড তৈরি করুন
+            {isIOS ? (
+              <>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+                  <polyline points="16 6 12 2 8 6"></polyline>
+                  <line x1="12" y1="2" x2="12" y2="15"></line>
+                </svg>
+                ফটোকার্ড শেয়ার / সেভ করুন
+              </>
+            ) : (
+              <>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                ফটোকার্ড ডাউনলোড করুন
+              </>
+            )}
           </button>
           
           <div className="trust-badge">
