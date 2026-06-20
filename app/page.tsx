@@ -6,6 +6,8 @@ export default function Home() {
   const [name, setName] = useState('');
   const [department, setDepartment] = useState('');
   const [session, setSession] = useState('');
+  const [level, setLevel] = useState('');
+  const [subject, setSubject] = useState('');
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [photoOffset, setPhotoOffset] = useState({ x: 0, y: 0 });
   const [photoScale, setPhotoScale] = useState(1);
@@ -97,11 +99,12 @@ export default function Home() {
         ctx.fillText(name || 'আপনার নাম', textStartX, pill1Y);
 
         ctx.font = 'bold 34px "Noto Serif Bengali", serif';
-        ctx.fillText(department || 'বিভাগ', textStartX, pill2Y);
+        const displayDepartment = level && subject ? `${subject} (${level})` : 'বিভাগ';
+        ctx.fillText(displayDepartment, textStartX, pill2Y);
         ctx.fillText(session || 'সেশন', textStartX, pill3Y);
       };
     });
-  }, [imageSrc, name, department, session, photoOffset, photoScale]);
+  }, [imageSrc, name, level, subject, session, photoOffset, photoScale]);
 
   const getCanvasScale = useCallback(() => {
     const canvas = canvasRef.current;
@@ -261,26 +264,24 @@ export default function Home() {
     }, 'image/png');
   };
 
-  const departments = [
-    '',
-    'এইচএসসি (বিজ্ঞান)',
-    'এইচএসসি (ব্যবসায় শিক্ষা)',
-    'এইচএসসি (মানবিক)',
-    '── ডিগ্রী ──',
-    'বি.বি.এস (ডিগ্রী)',
-    'বি.এ (ডিগ্রী)',
-    'বি.কম (ডিগ্রী)',
-    'বি.এস.সি (ডিগ্রী)',
-    'বি.এস.এস (ডিগ্রী)',
-    '── মানবিক ও সামাজিক বিজ্ঞান অনুষদ ──',
-    'বাংলা', 'ইংরেজি', 'ইতিহাস', 'ইসলামের ইতিহাস ও সংস্কৃতি',
-    'ইসলামিক স্টাডিজ', 'দর্শন', 'অর্থনীতি', 'রাষ্ট্রবিজ্ঞান', 'সমাজকর্ম',
-    '── বিজ্ঞান অনুষদ ──',
-    'রসায়ন', 'পদার্থবিজ্ঞান', 'উদ্ভিদবিজ্ঞান', 'প্রাণিবিদ্যা',
-    'গণিত', 'মৃত্তিকাবিজ্ঞান', 'ভূগোল ও পরিবেশ',
-    '── ব্যবসায় শিক্ষা অনুষদ ──',
-    'ব্যবস্থাপনা', 'হিসাববিজ্ঞান', 'ফিন্যান্স ও ব্যাংকিং', 'মার্কেটিং',
-  ];
+  const departmentsByLevel: Record<string, string[]> = {
+    'এইচএসসি': ['বিজ্ঞান', 'ব্যবসায় শিক্ষা', 'মানবিক'],
+    'ডিগ্রী': ['বি.এ', 'বি.বি.এস', 'বি.কম', 'বি.এস.সি', 'বি.এস.এস'],
+    'স্নাতক': [
+      'বাংলা', 'ইংরেজি', 'ইতিহাস', 'ইসলামের ইতিহাস ও সংস্কৃতি',
+      'ইসলামিক স্টাডিজ', 'দর্শন', 'অর্থনীতি', 'রাষ্ট্রবিজ্ঞান', 'সমাজকর্ম',
+      'রসায়ন', 'পদার্থবিজ্ঞান', 'উদ্ভিদবিজ্ঞান', 'প্রাণিবিদ্যা',
+      'গণিত', 'মৃত্তিকাবিজ্ঞান', 'ভূগোল ও পরিবেশ',
+      'ব্যবস্থাপনা', 'হিসাববিজ্ঞান', 'ফিন্যান্স ও ব্যাংকিং', 'মার্কেটিং',
+    ],
+    'স্নাতকোত্তর': [
+      'বাংলা', 'ইংরেজি', 'ইতিহাস', 'ইসলামের ইতিহাস ও সংস্কৃতি',
+      'ইসলামিক স্টাডিজ', 'দর্শন', 'অর্থনীতি', 'রাষ্ট্রবিজ্ঞান', 'সমাজকর্ম',
+      'রসায়ন', 'পদার্থবিজ্ঞান', 'উদ্ভিদবিজ্ঞান', 'প্রাণিবিদ্যা',
+      'গণিত', 'মৃত্তিকাবিজ্ঞান', 'ভূগোল ও পরিবেশ',
+      'ব্যবস্থাপনা', 'হিসাববিজ্ঞান', 'ফিন্যান্স ও ব্যাংকিং', 'মার্কেটিং',
+    ],
+  };
 
   const sessions = [''];
   for (let y = 1962; y <= 2025; y++) {
@@ -459,21 +460,31 @@ export default function Home() {
 
           <div className="form-row">
             <div className="form-group">
-              <label className="field-label">বিভাগ</label>
+              <label className="field-label">স্তর</label>
               <div className="input-wrapper">
-                <svg className="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                <select value={department} onChange={(e) => {
-                    const val = e.target.value;
-                    if (!val.startsWith('──') && val !== departments[0]) setDepartment(val);
-                  }}>
-                  {departments.map((d, i) => (
-                    <option key={i} value={d} disabled={d === '' || d.startsWith('──')} style={{ color: d.startsWith('──') ? '#9e90c8' : '#2d1a6e' }}>
-                      {d === '' ? 'বিভাগ নির্বাচন করুন' : d}
-                    </option>
+                <svg className="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                <select value={level} onChange={(e) => { setLevel(e.target.value); setSubject(''); }}>
+                  <option value="">স্তর নির্বাচন</option>
+                  {Object.keys(departmentsByLevel).map(l => (
+                    <option key={l} value={l}>{l}</option>
                   ))}
                 </select>
               </div>
             </div>
+
+            <div className="form-group">
+              <label className="field-label">বিভাগ</label>
+              <div className="input-wrapper">
+                <svg className="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                <select value={subject} onChange={(e) => setSubject(e.target.value)} disabled={!level}>
+                  <option value="">বিভাগ নির্বাচন</option>
+                  {(departmentsByLevel[level] || []).map(s => (
+                    <option key={s} value={s}>{s}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
 
             <div className="form-group">
               <label className="field-label">সেশন</label>
@@ -491,7 +502,6 @@ export default function Home() {
                 </select>
               </div>
             </div>
-          </div>
 
           <div className="form-group">
             <label className="field-label">আপনার ছবি আপলোড করুন</label>
